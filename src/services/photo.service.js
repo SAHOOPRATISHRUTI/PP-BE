@@ -1,12 +1,14 @@
 const Photo = require("../models/Photo");
 
-exports.addPhoto = async (file, body) => {
-  return await Photo.create({
-    title: body.title,
-    caption: body.caption,
+exports.addMany = async (files, body) => {
+  const docs = files.map(file => ({
+    title: body.title || "",
+    caption: body.caption || "",
     locationId: body.locationId,
     imageUrl: "/uploads/" + file.filename
-  });
+  }));
+
+  return await Photo.insertMany(docs);
 };
 
 exports.getPhotosByLocation = async (locationId) => {
